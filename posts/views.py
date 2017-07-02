@@ -1,9 +1,12 @@
 from django.http import HttpResponse
 
+from posts.models import Content
+
 
 def get_post(request, title_slug):
-    response = "I should return post named %s"
-    return HttpResponse(response % title_slug)
+    response = Content.objects.filter(slug=title_slug)
+    # response = "I should return post named %s"
+    return HttpResponse(response)
 
 
 def get_post_summary_year(request, year):
