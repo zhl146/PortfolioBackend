@@ -29,7 +29,7 @@ urlpatterns = [
         name='get_post_summaries_by_category'
     ),
     url(
-        r'^category/(?P<tag>[-\w]+)/?$',
+        r'^tag/(?P<tag>[-\w]+)/?$',
         views.get_post_summaries_by_tag,
         name='get_post_summaries_by_tag'
     ),
