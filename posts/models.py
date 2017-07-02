@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils.text import slugify
+import re
 
 # Create your models here.
 
@@ -34,9 +35,16 @@ class Content(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     create_date = models.DateTimeField(auto_now_add=True)
     edit_date = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=512)
-    slug = models.SlugField(unique=True)
+    title = models.CharField(max_length=512, unique=True)
+    slug = models.SlugField(blank=True, null=True, default=None, unique=True)
     content = models.TextField()
 
     def __str__(self):
-        return self.author.last_name + " , " + self.author.first_name + ": " + self.title
+        return self.author.last_name + ", " + self.author.first_name + ": " + self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        else:
+            self.slug = slugify(self.slug)
+        super(Content, self).save(*args, **kwargs)
