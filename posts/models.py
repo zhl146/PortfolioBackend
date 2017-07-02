@@ -97,4 +97,4 @@ class Content(models.Model):
         return s.get_data()
 
     def summary(self):
-        return self.strip_tags()
+        return self.strip_tags().split(' ')
