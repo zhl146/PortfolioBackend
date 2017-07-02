@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class User(models.Model):
     username = models.CharField(max_length=128)
     email = models.EmailField(max_length=254)
@@ -9,11 +10,14 @@ class User(models.Model):
     first_name = models.CharField(max_length=64)
     last_name = models.CharField(max_length=64)
 
+
 class Tag(models.Model):
     tag_desc = models.CharField(max_length=128)
 
+
 class Category(models.Model):
     category_desc = models.CharField(max_length=128)
+
 
 class Content(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -23,5 +27,3 @@ class Content(models.Model):
     title = models.CharField(max_length=512)
     slug = models.SlugField(unique=True)
     content = models.TextField()
-
-
