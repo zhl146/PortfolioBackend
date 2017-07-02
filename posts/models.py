@@ -57,7 +57,7 @@ class Content(models.Model):
         for tag in self.tag_list.all():
             tag_list.append(tag.tag_desc)
         client_json = {
-            'author': self.author.first_name + '' + self.author.last_name,
+            'author': self.author.first_name + ' ' + self.author.last_name,
             'title': self.title,
             'tag_list': tag_list,
             'create_date': self.create_date,
