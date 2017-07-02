@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
+import hashlib
 
 
 class User(models.Model):
@@ -12,6 +13,11 @@ class User(models.Model):
     def __str__(self):
         return self.last_name + ", " + self.first_name + " (" + self.username + ")"
 
+    '''def save(self, *args, **kwargs):
+        self.password = hashlib.sha224(self.password.encode('utf-8')).hexdigest()
+        super(User, self).save(*args, **kwargs)'''  # This needs to go in a user create procedure
+
+# TODO: Add Tag Bridge table to Content
 
 class Tag(models.Model):
     tag_desc = models.CharField(max_length=128)
