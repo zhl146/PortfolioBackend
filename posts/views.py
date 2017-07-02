@@ -5,7 +5,7 @@ from posts.models import Content, Tag
 
 # gets a single post by querying with title_slug
 def get_post(request, title_slug):
-    post = Content.objects.filter(slug=title_slug)[0]
+    post = Content.objects.filter(slug=title_slug)
     json = serializers.serialize('json', post)
     return HttpResponse(json)
 
@@ -14,7 +14,7 @@ def get_post(request, title_slug):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summary_year(request, year):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Content.objects.filter(create_date__year=year).order_by('-create_date')[:posts_requested]
     json = serializers.serialize('json', query_set)
     return HttpResponse(json)
@@ -24,7 +24,7 @@ def get_post_summary_year(request, year):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summary_month(request, year, month):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Content.objects.filter(create_date__year=year,
                                        create_date__month=month).order_by('-create_date')[:posts_requested]
     json = serializers.serialize('json', query_set)
@@ -35,7 +35,7 @@ def get_post_summary_month(request, year, month):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summary_day(request, year, month, day):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Content.objects.filter(create_date__year=year,
                                        create_date__month=month,
                                        create_date__day=day)[:posts_requested]
@@ -47,7 +47,7 @@ def get_post_summary_day(request, year, month, day):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summaries(request):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Content.objects.order_by('-create_date')[:posts_requested]
     json = serializers.serialize('json', query_set)
     return HttpResponse(json)
@@ -57,7 +57,7 @@ def get_post_summaries(request):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summaries_by_category(request, category):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Content.objects.filter(category=category)[:posts_requested]
     json = serializers.serialize('json', query_set)
     return HttpResponse(json)
@@ -67,7 +67,7 @@ def get_post_summaries_by_category(request, category):
 # X comes from the ?posts param and defaults to 5
 # currently returns entire posts and not summaries
 def get_post_summaries_by_tag(request, tag):
-    posts_requested = request.GET.get('posts', 5)
+    posts_requested = int(request.GET.get('posts', 5))
     query_set = Tag.objects.filter(tag_desc=tag)[:posts_requested]
     json = serializers.serialize('json', query_set)
     return HttpResponse(json)
