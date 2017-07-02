@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from posts.models import Content, Tag
 
@@ -6,8 +6,8 @@ from posts.models import Content, Tag
 # gets a single post by querying with title_slug
 def get_post(request, title_slug):
     post = Content.objects.get(slug=title_slug)
-    json = serializers.serialize('json', post)
-    return HttpResponse(json)
+    json = post.get_client_json()
+    return JsonResponse(json)
 
 
 # gets X number of most recent posts from the requested year

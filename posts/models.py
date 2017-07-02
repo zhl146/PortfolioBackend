@@ -51,3 +51,17 @@ class Content(models.Model):
         else:
             self.slug = slugify(self.slug)
         super(Content, self).save(*args, **kwargs)
+
+    def get_client_json(self):
+        tag_list = []
+        for tag in self.tag_list.all():
+            tag_list.append(tag.tag_desc)
+        client_json = {
+            'author': self.author.first_name + '' + self.author.last_name,
+            'title': self.title,
+            'tag_list': tag_list,
+            'create_date': self.create_date,
+            'edit_date': self.edit_date,
+            'content': self.content
+        }
+        return client_json
