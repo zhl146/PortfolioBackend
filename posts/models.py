@@ -17,7 +17,6 @@ class User(models.Model):
         self.password = hashlib.sha224(self.password.encode('utf-8')).hexdigest()
         super(User, self).save(*args, **kwargs)'''  # This needs to go in a user create procedure
 
-# TODO: Add Tag Bridge table to Content
 
 class Tag(models.Model):
     tag_desc = models.CharField(max_length=128)
@@ -41,6 +40,7 @@ class Content(models.Model):
     title = models.CharField(max_length=512, unique=True)
     slug = models.SlugField(blank=True, null=True, default=None, unique=True)
     content = models.TextField()
+    tag_list = models.ManyToManyField(Tag)
 
     def __str__(self):
         return self.author.last_name + ", " + self.author.first_name + ": " + self.title
