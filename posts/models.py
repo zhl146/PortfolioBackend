@@ -1,8 +1,5 @@
 from django.db import models
 from django.utils.text import slugify
-import re
-
-# Create your models here.
 
 
 class User(models.Model):
