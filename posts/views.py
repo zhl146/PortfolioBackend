@@ -68,6 +68,9 @@ def get_post_summaries_by_category(request, category):
 # currently returns entire posts and not summaries
 def get_post_summaries_by_tag(request, tag):
     posts_requested = int(request.GET.get('posts', 5))
-    query_set = Tag.objects.filter(tag_desc=tag)[:posts_requested]
-    json = serializers.serialize('json', query_set)
+    # gets tags
+    tag_set = Tag.objects.filter(tag_desc=tag)
+    # uses the tags to cross reference contents
+    content_set = Content.objects.filter(tag_list__in=tag_set)[:posts_requested]
+    json = serializers.serialize('json', content_set)
     return HttpResponse(json)
