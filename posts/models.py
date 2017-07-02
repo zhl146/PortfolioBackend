@@ -68,7 +68,17 @@ class Content(models.Model):
             self.slug = slugify(self.slug)
         super(Content, self).save(*args, **kwargs)
 
-    def get_client_json(self):
+    def get_post_json(self):
+        client_json = self.get_content_meta()
+        client_json['content'] = self.content
+        return client_json
+
+    def get_summary_json(self):
+        client_json = self.get_content_meta()
+        client_json['content'] = self.summary()
+        return client_json
+
+    def get_content_meta(self):
         tag_list = []
         for tag in self.tag_list.all():
             tag_list.append(tag.tag_desc)
@@ -77,8 +87,7 @@ class Content(models.Model):
             'title': self.title,
             'tag_list': tag_list,
             'create_date': self.create_date,
-            'edit_date': self.edit_date,
-            'content': self.content
+            'edit_date': self.edit_date
         }
         return client_json
 
