@@ -1,5 +1,4 @@
-from django.http import HttpResponse, JsonResponse
-from django.core import serializers
+from django.http import JsonResponse
 from posts.models import Content, Tag
 
 
@@ -35,8 +34,12 @@ def get_post_summary_month(request, year, month):
     post_offset = int(request.GET.get('offset', 0))
     query_set = Content.objects.filter(create_date__year=year,
                                        create_date__month=month).order_by('-create_date')[post_offset:posts_requested]
-    json = serializers.serialize('json', query_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in query_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
 
 
 # gets X number of most recent posts from the requested year/month/day
@@ -49,8 +52,12 @@ def get_post_summary_day(request, year, month, day):
     query_set = Content.objects.filter(create_date__year=year,
                                        create_date__month=month,
                                        create_date__day=day)[post_offset:posts_requested]
-    json = serializers.serialize('json', query_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in query_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
 
 
 # gets X number of most recent posts
@@ -61,8 +68,12 @@ def get_post_summaries(request):
     posts_requested = int(request.GET.get('posts', 5))
     post_offset = int(request.GET.get('offset', 0))
     query_set = Content.objects.order_by('-create_date')[post_offset:posts_requested]
-    json = serializers.serialize('json', query_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in query_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
 
 
 # gets X number of most recent posts with category
@@ -73,8 +84,12 @@ def get_post_summaries_by_category(request, category):
     posts_requested = int(request.GET.get('posts', 5))
     post_offset = int(request.GET.get('offset', 0))
     query_set = Content.objects.filter(category=category)[post_offset:posts_requested]
-    json = serializers.serialize('json', query_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in query_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
 
 
 # gets X number of most recent posts with tag
@@ -88,5 +103,9 @@ def get_post_summaries_by_tag(request, tag):
     tag_set = Tag.objects.filter(tag_desc=tag)
     # uses the tags to cross reference contents
     content_set = Content.objects.filter(tag_list__in=tag_set)[post_offset:posts_requested]
-    json = serializers.serialize('json', content_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in content_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
