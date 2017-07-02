@@ -97,4 +97,4 @@ class Content(models.Model):
         return s.get_data()
 
     def summary(self):
-        return self.strip_tags().split(' ')
+        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50])
