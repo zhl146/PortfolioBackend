@@ -39,4 +39,4 @@ class Content(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.author.last_name + " , " + self.author.first_name + ": " + self.title
+        return self.author.last_name + ", " + self.author.first_name + ": " + self.title
