@@ -12,7 +12,7 @@ class User(models.Model):
     last_name = models.CharField(max_length=64)
 
     def __str__(self):
-        return self.last_name+", "+self.first_name+" ("+self.username+")"
+        return self.last_name + ", " + self.first_name + " (" + self.username + ")"
 
 
 class Tag(models.Model):
@@ -39,4 +39,4 @@ class Content(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.author.last_name+" , "+self.author.first_name+": "+self.title
+        return self.author.last_name + " , " + self.author.first_name + ": " + self.title
