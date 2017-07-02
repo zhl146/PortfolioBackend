@@ -58,7 +58,7 @@ class Content(models.Model):
     content = models.TextField()
     tag_list = models.ManyToManyField(Tag)
     image = models.CharField(blank=True, null=True, default=None, max_length=254)
-    abstract = models.TextField(blank=True, null=True, default=None, max_length=254)
+    abstract = models.TextField(blank=True, null=True, default=None, max_length=1024)
 
     def __str__(self):
         return self.author.last_name + ", " + self.author.first_name + ": " + self.title
