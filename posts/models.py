@@ -101,4 +101,5 @@ class Content(models.Model):
         return s.get_data()
 
     def summary(self):
-        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50]).replace(' ', '')
+        # Take content, and return fifty words after stripping HTML tags, replace newlines with spaces.
+        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50]).replace('\n', ' ').replace('\r', '')
