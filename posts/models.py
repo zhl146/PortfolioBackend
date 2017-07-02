@@ -1,6 +1,22 @@
 from django.db import models
 from django.utils.text import slugify
-import hashlib
+from html.parser import HTMLParser
+
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.reset()
+        self.fed = []
+
+    def handle_data(self, d):
+        self.fed.append(d)
+
+    def get_data(self):
+        return ''.join(self.fed)
+
+
+'''import hashlib'''
 
 
 class User(models.Model):
@@ -65,3 +81,11 @@ class Content(models.Model):
             'content': self.content
         }
         return client_json
+
+    def strip_tags(self):
+        s = MLStripper()
+        s.feed(self.content)
+        return s.get_data()
+
+    def summary(self):
+        return self.strip_tags()
