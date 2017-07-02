@@ -18,8 +18,12 @@ def get_post_summary_year(request, year):
     posts_requested = int(request.GET.get('posts', 5))
     post_offset = int(request.GET.get('offset', 0))
     query_set = Content.objects.filter(create_date__year=year).order_by('-create_date')[post_offset:posts_requested]
-    json = serializers.serialize('json', query_set)
-    return HttpResponse(json)
+    post_list = {
+        'posts': []
+    }
+    for item in query_set:
+        post_list['posts'].append(item.get_client_json())
+    return JsonResponse(post_list)
 
 
 # gets X number of most recent posts from the requested year/month
