@@ -57,6 +57,8 @@ class Content(models.Model):
     slug = models.SlugField(blank=True, null=True, default=None, unique=True)
     content = models.TextField()
     tag_list = models.ManyToManyField(Tag)
+    image = models.CharField(blank=True, null=True, default=None, max_length=254)
+    abstract = models.TextField(blank=True, null=True, default=None, max_length=254)
 
     def __str__(self):
         return self.author.last_name + ", " + self.author.first_name + ": " + self.title
@@ -66,6 +68,8 @@ class Content(models.Model):
             self.slug = slugify(self.title)
         else:
             self.slug = slugify(self.slug)
+        if not self.abstract:
+            self.abstract = self.summary()
         super(Content, self).save(*args, **kwargs)
 
     def get_post_json(self):
@@ -97,4 +101,4 @@ class Content(models.Model):
         return s.get_data()
 
     def summary(self):
-        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50])
+        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50]).replace(' ', '')
