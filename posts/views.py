@@ -15,8 +15,9 @@ def get_post(request, title_slug):
 # currently returns entire posts and not summaries
 def get_post_summary_year(request, year):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
-    query_set = Content.objects.filter(create_date__year=year).order_by('-create_date')[post_offset:posts_requested]
+    offset_index = int(request.GET.get('offset', 0))
+    ending_index = offset_index + posts_requested
+    query_set = Content.objects.filter(create_date__year=year).order_by('-create_date')[offset_index:ending_index]
     post_list = {
         'posts': []
     }
@@ -31,9 +32,10 @@ def get_post_summary_year(request, year):
 # currently returns entire posts and not summaries
 def get_post_summary_month(request, year, month):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
+    offset_index = int(request.GET.get('offset', 0))
+    ending_index = offset_index + posts_requested
     query_set = Content.objects.filter(create_date__year=year,
-                                       create_date__month=month).order_by('-create_date')[post_offset:posts_requested]
+                                       create_date__month=month).order_by('-create_date')[offset_index:ending_index]
     post_list = {
         'posts': []
     }
@@ -48,10 +50,11 @@ def get_post_summary_month(request, year, month):
 # currently returns entire posts and not summaries
 def get_post_summary_day(request, year, month, day):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
+    offset_index = int(request.GET.get('offset', 0))
+    ending_index = offset_index + posts_requested
     query_set = Content.objects.filter(create_date__year=year,
                                        create_date__month=month,
-                                       create_date__day=day)[post_offset:posts_requested]
+                                       create_date__day=day)[offset_index:ending_index]
     post_list = {
         'posts': []
     }
@@ -66,8 +69,8 @@ def get_post_summary_day(request, year, month, day):
 # currently returns entire posts and not summaries
 def get_post_summaries(request):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
-    query_set = Content.objects.order_by('-create_date')[post_offset:posts_requested]
+    offset_index = int(request.GET.get('offset', 0))
+    query_set = Content.objects.order_by('-create_date')[offset_index:ending_index]
     post_list = {
         'posts': []
     }
@@ -82,8 +85,9 @@ def get_post_summaries(request):
 # currently returns entire posts and not summaries
 def get_post_summaries_by_category(request, category):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
-    query_set = Content.objects.filter(category=category)[post_offset:posts_requested]
+    offset_index = int(request.GET.get('offset', 0))
+    ending_index = offset_index + posts_requested
+    query_set = Content.objects.filter(category=category)[offset_index:ending_index]
     post_list = {
         'posts': []
     }
@@ -98,11 +102,12 @@ def get_post_summaries_by_category(request, category):
 # currently returns entire posts and not summaries
 def get_post_summaries_by_tag(request, tag):
     posts_requested = int(request.GET.get('posts', 5))
-    post_offset = int(request.GET.get('offset', 0))
+    offset_index = int(request.GET.get('offset', 0))
+    ending_index = offset_index + posts_requested
     # gets tags
     tag_set = Tag.objects.filter(tag_desc=tag)
     # uses the tags to cross reference contents
-    content_set = Content.objects.filter(tag_list__in=tag_set)[post_offset:posts_requested]
+    content_set = Content.objects.filter(tag_list__in=tag_set)[offset_index:ending_index]
     post_list = {
         'posts': []
     }
