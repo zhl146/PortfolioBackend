@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from html.parser import HTMLParser
+import hashlib
 
 
 class MLStripper(HTMLParser):
@@ -29,9 +30,19 @@ class User(models.Model):
     def __str__(self):
         return self.last_name + ", " + self.first_name + " (" + self.username + ")"
 
-    '''def save(self, *args, **kwargs):
-        self.password = hashlib.sha224(self.password.encode('utf-8')).hexdigest()
-        super(User, self).save(*args, **kwargs)'''  # This needs to go in a user create procedure
+    @staticmethod
+    def get_hash(password_in):
+        # This is a helper method that defines the hash method used for authentication
+        # TODO: Add salt and recursion?
+        return hashlib.sha224(str(password_in).encode('utf-8')).hexdigest()
+
+    def set_password(self, new_password):
+        # This needs to be referenced by a create user or update password function on the front-end
+        self.password = User.get_hash(new_password)
+
+    def check_password(self, try_password):
+        # This method allows for authentication against a password received during authenticati
+        return self.password == User.get_hash(try_password)
 
 
 class Tag(models.Model):
