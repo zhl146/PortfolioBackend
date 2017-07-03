@@ -1,20 +1,5 @@
 from django.db import models
 from django.utils.text import slugify
-from html.parser import HTMLParser
-
-
-class MLStripper(HTMLParser):
-    def __init__(self):
-        super().__init__()
-        self.reset()
-        self.fed = []
-
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
-
 
 '''import hashlib'''
 
@@ -57,8 +42,7 @@ class Content(models.Model):
     slug = models.SlugField(blank=True, null=True, default=None, unique=True)
     content = models.TextField()
     tag_list = models.ManyToManyField(Tag)
-    image = models.CharField(blank=True, null=True, default=None, max_length=254)
-    abstract = models.TextField(blank=True, null=True, default=None, max_length=254)
+    abstract = models.TextField()
 
     def __str__(self):
         return self.author.last_name + ", " + self.author.first_name + ": " + self.title
@@ -68,18 +52,16 @@ class Content(models.Model):
             self.slug = slugify(self.title)
         else:
             self.slug = slugify(self.slug)
-        if not self.abstract:
-            self.abstract = self.summary()
         super(Content, self).save(*args, **kwargs)
 
     def get_post_json(self):
         client_json = self.get_content_meta()
-        client_json['content'] = self.content
+        client_json['content'] = self.abstract + self.content
         return client_json
 
     def get_summary_json(self):
         client_json = self.get_content_meta()
-        client_json['content'] = self.summary()
+        client_json['content'] = self.abstract
         return client_json
 
     def get_content_meta(self):
@@ -91,14 +73,7 @@ class Content(models.Model):
             'title': self.title,
             'tag_list': tag_list,
             'create_date': self.create_date,
-            'edit_date': self.edit_date
+            'edit_date': self.edit_date,
+            'slug': self.slug,
         }
         return client_json
-
-    def strip_tags(self):
-        s = MLStripper()
-        s.feed(self.content)
-        return s.get_data()
-
-    def summary(self):
-        return ' '.join(list(filter(' '.__ne__, self.strip_tags().split(' ')))[:50]).replace(' ', '')
