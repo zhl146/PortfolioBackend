@@ -80,6 +80,8 @@ class Content(models.Model):
     def get_summary_json(self):
         client_json = self.get_content_meta()
         client_json['content'] = self.summary()
+        client_json['image'] = self.image
+        client_json['abstract'] = self.abstract
         return client_json
 
     def get_content_meta(self):
