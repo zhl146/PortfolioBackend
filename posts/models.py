@@ -56,7 +56,7 @@ class Content(models.Model):
     title = models.CharField(max_length=512, unique=True)
     slug = models.SlugField(blank=True, null=True, default=None, unique=True)
     content = models.TextField()
-    tag_list = models.ManyToManyField(Tag)
+    tag_list = models.ManyToManyField(Tag, blank=True)
     image = models.CharField(blank=True, null=True, default=None, max_length=254)
     abstract = models.TextField(blank=True, null=True, default=None, max_length=1024)
 
