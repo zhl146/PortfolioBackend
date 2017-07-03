@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils.text import slugify
-
-'''import hashlib'''
+import hashlib
 
 
 class User(models.Model):
