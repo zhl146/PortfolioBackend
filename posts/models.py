@@ -41,7 +41,7 @@ class User(models.Model):
         self.password = User.get_hash(new_password)
 
     def check_password(self, try_password):
-        # This method allows for authentication against a password received during authenticati
+        # This method allows for authentication against a password received during authentication (returns binary)
         return self.password == User.get_hash(try_password)
 
 
