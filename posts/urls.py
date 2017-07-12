@@ -7,7 +7,7 @@ urlpatterns = [
         r'^(?P<year>[\d]{4})/?$',
         views.get_post_summary_year,
         name='get_post_summary_year'
-        ),
+    ),
     url(
         r'^(?P<year>[\d]{4})/(?P<month>[\d]{2})/?$',
         views.get_post_summary_month,

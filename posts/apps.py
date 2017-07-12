@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class postsConfig(AppConfig):
+class PostsConfig(AppConfig):
     name = 'posts'
